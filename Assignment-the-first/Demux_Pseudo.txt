@@ -20,6 +20,17 @@ Author: Sophia Soriano
 
 Pseudo code outline
 
+Reverse complement function:
+
+def reverse_complement(index2_seqline)
+    '''Given an input DNA index sequence, returns the reverse complement of that sequence'''
+    return index2_revcomp
+
+    Example Input: CTCTGGAT
+    Example Output: ATCCAGAG
+
+Main code:
+
     * Open all 52 output files for writing and store file handles (fhs) in a list inside of a dictionary. This dictionary will be in the format (key=index1/indexhopped/unknown,value=list of fhs). For each dual matched file (index1 = key), the list should have two fhs for read 1 and read 2. For the indexhopped reads, the list should have two fhs for read 1 and read 2. For the unknown reads, the list should have two fhs for read 1 and read 2.
     * Open indexes.txt, retrieve 5th column in tab-separated file, and store each of these known indexes in a set
     * Initialize 3 counter variables for total dual matched, index hopped, and unknown records (DM_count, IH_count, U_count)
@@ -29,6 +40,7 @@ Pseudo code outline
         ** So for each record:
             *** Assign variables for each of the four lines composing a record for all four files (or maybe store the record lines for each file in separate lists that are overwritten with each while loop iteration) - strip newlines!
             *** Use a "reverse_complement" function to return the reverse complement sequence for index2 seq line - output stored in a variable
+                **** Should be added to bioinfo.py
                 **** Should account for "N" base call possibility
                 **** Input = index2_seqline (CTCTGGAT), Expected Output = the reverse complement of index2_seqline (ATCCAGAG)
             *** Add "Index1-Index2_revcomp" to end of header line in both read 1 and 2 records (by concatenating to end of header variables)

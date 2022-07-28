@@ -12,21 +12,36 @@
 
 2. Per-base NT distribution
     1. Use markdown to insert your 4 histograms here.
+    
     Read 1 - QScore Distribution
+    
     ![This is the Read 1 QScore distribution](./QScore_read1.png)
+    
     Index 1 - QScore Distribution
+    
     ![This is the Index 1 QScore distribution](./QScore_index1.png)
+    
     Read 2 - QScore Distribution
+    
     ![This is the Read 2 QScore distribution](./QScore_read2.png)
+    
     Index 2 - QScore Distribution
+    
     ![This is the Index 2 QScore distribution](./QScore_index2.png)
 
     2. Index reads should have a quality score cutoff of >30, meaning that the accuracy of each base call is >99.9% (expected every 1 in 1000 bases is an error). Biological reads should have a quality score cutoff of >20, meaning that the accuracy of each base call is >99% (expected every 1 in 100 bases is an error). The biological reads should be high accuracy if possible, but the indices essentially require the highest possible quality scores so that you can be sure that your datasets have separated (demultiplexed) accurately.
 
-    3. Bash command Index 1= ``` $ zcat 1294_S1_L008_R2_001.fastq.gz | grep -A1 "^@" | grep -v "^@" | grep -v "^--" | grep "N" | wc -l ```
-       Bash command Index 2 = ``` $ zcat 1294_S1_L008_R3_001.fastq.gz | grep -A1 "^@" | grep -v "^@" | grep -v "^--" | grep "N" | wc -l ```
-        Outputs: Index 1 Command = 3976613, Index 2 Command = 3328051
-        Sum of indicies containing "N" = 7304664.
+    3. Bash command Index 1=
+    
+        ``` $ zcat 1294_S1_L008_R2_001.fastq.gz | grep -A1 "^@" | grep -v "^@" | grep -v "^--" | grep "N" | wc -l ```
+        
+       Bash command Index 2 =
+       
+        ``` $ zcat 1294_S1_L008_R3_001.fastq.gz | grep -A1 "^@" | grep -v "^@" | grep -v "^--" | grep "N" | wc -l ```
+        
+       Outputs: Index 1 Command = 3976613, Index 2 Command = 3328051
+       
+       Sum of indicies containing "N" = 7304664.
     
 ## Part 2
 1. Define the problem

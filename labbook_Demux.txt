@@ -1,0 +1,92 @@
+----------------------------------
+LAB NOTEBOOK - Demultiplexing Assignment
+Author: Sophia Soriano
+----------------------------------
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Part 1: Started 26JUL2022
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Cloned new Demultiplex repo (created from Leslie's template) into Bi622 folder in Talapas
+* Moved to /projects/bgmp/shared/2017_sequencing on Talapas to explore the four FASTQ data files
+    ** 1294_S1_L008_R1_001.fastq.gz
+    ** 1294_S1_L008_R2_001.fastq.gz
+    ** 1294_S1_L008_R3_001.fastq.gz
+    ** 1294_S1_L008_R4_001.fastq.gz
+* Recording answers on Answers.md file
+* Used the following command (with each file name above) to look at the first 10 lines of each file:
+    ** $ zcat 1294_S1_L008_R1_001.fastq.gz | head
+    ** The R1 and R4 files are read files (read 1 and read 2, respectively), and the R2 and R3 files are index files (index 1 and index 2, respectively)
+    ** The Phred encoding appears to be Phred +33, as J is the highest encoded character.
+* Used the following command (with each file name above) to find read lengths for each file
+    ** $ zcat 1294_S1_L008_R1_001.fastq.gz | head -2 | tail -1 | wc
+    ** Subtract 1 from results due to newline character
+* Created QScore_Dist.py to generate a distribution of QScores per base position for a specified file name and read length.
+* Installed numpy on Talapas and started interactive node with following command
+    ** $ srun --account=bgmp --partition=bgmp --nodes=1 --ntasks-per-node=1 --time=2:00:00 --cpus-per-task=1 --pty bash
+    ** Job 21722879 created and allocated to n278
+* Created test file using the following command
+    ** $ zcat /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R1_001.fastq.gz | head -40 > /projects/bgmp/ssoriano/bioinfo/Bi622/Demultiplex/Assignment-the-first/test_P1.fq
+    ** Test file ran successfully using QScore_Dist.py, bar graph looks reasonable
+* Imported gzip to run zipped files in QScore_Dist.py
+* Ran QScore_Dist.py with R1 FASTQ file, but output was specified to be in Leslie's directory...
+    ** Added -o in argparse to specify output file name
+* Created 4 slurm scripts (QScore.srun, QScoreR2.srun, QScoreR3.srun, QScoreR4.srun) to run each of the four input files
+    ** Submitted each to Talapas: 21725656 (R1), 21725657 (R2), 21725658 (R3), 21725659 (R4)
+* All four jobs completed successfully:
+    ** 21725656 (R1 - read 1): time elapsed = 4:47:16 (h:m:s), Exit Status = 0 (see slurm-21725656.out)
+    ** 21725657 (R2 - index 1): time elapsed = 30:35.17 (m:s), Exit Status = 0 (see slurm-21725657.out)
+    ** 21725658 (R3 - index 2): time elapsed = 30:36.55 (m:s), Exit Status = 0 (see slurm-21725658.out)
+    ** 21725659 (R4 - read 2): time elapsed = 4:47:12 (h:m:s), Exit Status = 0 (see slurm-21725659.out)
+* Added all four histograms (QScore_read1.png, QScore_index1.png, QScore_index2.png, QScore_read2.png) to Answers.md file
+
+27JUL2022
+
+* Answered questions ii and iii in Answers.md
+    ** For iii --> $ zcat 1294_S1_L008_R2_001.fastq.gz | grep -A1 "^@" | grep -v "^@" | grep -v "^--" | grep "N" | wc -l
+    ** Repeated command for R3 file (Index 2)
+    ** Index 1 file (R2) output = 3976613
+    ** Index 2 file (R3) output = 3328051
+    ** Calculated sum (7304664)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Part 2: Started 26JUL2022
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Created Demux_Pseudo.txt file to start drafting Demultiplexing algorithm strategy and pseudocode.
+
+27JUL2022
+
+* Used the following command for each data file (1294_S1_L008_R1_001.fastq.gz, R2, R3, R4) to make input test files:
+    ** $ zcat 1294_S1_L008_R1_001.fastq.gz | head -1000000 | tail -12 > \
+        /projects/bgmp/ssoriano/bioinfo/Bi622/Demultiplex/Assignment-the-first/test1_P2.fq
+    ** This command isolates 3 records from a middle section of the file (head and tail too low quality)
+    ** First record is a dual match (CTCTGGAT-ATCCAGAG), second record is an unknown (TCTTCGAC-GAAGAAAA), third
+        record was a dual match (TACCGGAT-ATCCGGTA), but was changed to an index hopping case (AACAGCGA-ATCCGGTA).
+    ** Known indexes found in indexes.txt in shared Talapas folder with the four FASTQ data files
+    ** Test Input Files: test1_P2.fq, test2_P2.fq, test3_P2.fq, test4_P2.fq
+* Created 6 test output files that are expected from the above four input files
+    ** Test Output Files: test_output_DM_R1.fq, test_output_DM_R2.fq, test_output_IH_R1.fq, test_output_IH_R2.fq,
+        test_output_U_R1.fq, test_output_U_R2.fq
+    ** DM_R1: first record from R1 (read 1) file, added "index 1(from R2 file)-index2(from R3 file, rev. comp.)" to
+        end of header line
+    ** DM_R2: first record from R2 (read 2) file, added "index 1(from R2 file)-index2(from R3 file, rev. comp.)" to
+        end of header line
+    ** IH_R1: third record from R1 (read 1) file, added "index 1(from R2 file)-index2(from R3 file, rev. comp.)" to
+        end of header line
+    ** IH_R2: third record from R2 (read 1) file, added "index 1(from R2 file)-index2(from R3 file, rev. comp.)" to
+        end of header line
+    ** U_R1: second record from R1 (read 1) file, added "index 1(from R2 file)-index2(from R3 file, rev. comp.)" to
+        end of header line
+     ** U_R2: second record from R2 (read 1) file, added "index 1(from R2 file)-index2(from R3 file, rev. comp.)" to
+        end of header line
+
+28JUL2022
+
+* Completed pseudocode file:
+    ** Used while True loop to get one record (4 lines) at a time for each file - will need to decide if its easier to store each line in variables (16 variables) or use 4 lists w/ 4 items each.
+    ** Changed from reading through five files (4 data files and indexes.txt) to creating a set of known indexes (column 5) from indexes.txt before opening the 4 data files and doing everything else. Set still allows me to check if the current index is contained in the set.
+    ** Talked w/ Leslie about best (most time-effective) method to write to files - create a initial dictionary of lists containing 2 fh for each index1/IH/U
+    ** See Demux_Pseudo.txt for full pseudocode w/ rational for each step
+* Uploaded all Assignment-the-first files to github
+    

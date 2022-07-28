@@ -1,0 +1,58 @@
+----------------------------------
+Pseudocode - Demultiplexing Assignment
+Author: Sophia Soriano
+----------------------------------
+
+* Define the problem:
+
+    ** Data returned from a sequencer will often contain more than one library sample to take full
+        advantage of the flowcell capacity (multiplexing). In order to de-multiplex this combined dataset,
+        the algorithm described here should be able to separate reads based on index pairs into 52 new FASTQ files:
+        48 dual match files (24 index-matched read 1, 24 index-matched read 2), 2 index hopped (non-matching indices) files, and 2 unknown (non-existant indices)
+        files.
+
+* Determine/describe what output would be informative
+
+    ** Separated output files based on index-pairs (should be 52 total)
+    ** Number of records in each output file
+    ** The count of each index-pair observed across dual matched and index hopped output files
+    ** Create new header line for each record in the format "@Header_Index1_Index2"
+
+Pseudo code outline
+
+    * Open all 52 output files for writing and store file handles (fhs) in a list inside of a dictionary. This dictionary will be in the format (key=index1/indexhopped/unknown,value=list of fhs). For each dual matched file (index1 = key), the list should have two fhs for read 1 and read 2. For the indexhopped reads, the list should have two fhs for read 1 and read 2. For the unknown reads, the list should have two fhs for read 1 and read 2.
+    * Open indexes.txt, retrieve 5th column in tab-separated file, and store each of these known indexes in a set
+    * Initialize 3 counter variables for total dual matched, index hopped, and unknown records (DM_count, IH_count, U_count)
+    * Initialize 3 dictionaries (dualmatched_dict, indexhop_dict, unknown_dict) to count index-pair occurances (key=index-pair, value=count)
+    * Open all four FASTQ input files to read at the same time
+        ** Use while True loop to go through each record in all four files at the same time (first conditional: stop when header of any file = "")
+        ** So for each record:
+            *** Assign variables for each of the four lines composing a record for all four files (or maybe store the record lines for each file in separate lists that are overwritten with each while loop iteration) - strip newlines!
+            *** Use a "reverse_complement" function to return the reverse complement sequence for index2 seq line - output stored in a variable
+                **** Should account for "N" base call possibility
+                **** Input = index2_seqline (CTCTGGAT), Expected Output = the reverse complement of index2_seqline (ATCCAGAG)
+            *** Add "Index1-Index2_revcomp" to end of header line in both read 1 and 2 records (by concatenating to end of header variables)
+            *** Check if index 1 (R2 file line 2) or index 2 (R3 file line 2) is not in set of known indexes (unknown). If True:
+                **** Edit unknown_dict = if index-pair variable is in dictionary, increase count value; else, add index-pair to dict w/ count of 1
+                **** Add complete record from R1 to unknown_R1 output file (fh stored in list in file dictionary key=unknown, [0])
+                **** Add complete record from R2 to unknown_R2 output file (fh stored in list in file dictionary key-unknown, [1])
+                **** Increment U_count by 1
+            *** Check if index 1 != index 2 rev comp (index hopping). If True:
+                **** Edit indexhop_dict = if index-pair variable is in dictionary, increase count value; else, add index-pair to dict w/ count of 1
+                **** Add complete record from R1 to indexhopped_R1 output file (fh stored in list in file dictionary key=indexhopped, [0])
+                **** Add complete record from R2 to indexhopped_R2 output file (fh stored in list in file dictionary key=indexhopped, [1])
+                **** Increment IH_count by 1
+            *** Check if index 1 == index 2 rev comp (dual matched). If True:
+                **** Edit dualmatched_dict = if index-pair variable is in dictionary, increase count value; else, add index-pair to dict w/ count of 1
+                **** Add complete record from R1 to dualmatched_R1 output file (fh stored in list in file dictionary key=index1, [0])
+                **** Add complete record from R2 to dualmatched_R2 output file (fh stored in list in file dictionary key=index1, [1])
+                **** Increment DM_count by 1
+    * Print out the DM, IH, and U total counters
+    * Print out the key, value pairs for all three dictionaries that tallied the number of occurances of each index-pair (dualmatched_dict, indexhopped_dict, unknown_dict)
+            
+                
+
+
+
+
+

@@ -1,0 +1,11 @@
+#!/bin/bash
+
+#SBATCH --account=bgmp          ### SLURM account which will be charged for the job
+#SBATCH --partition=bgmp          ### partition to run things
+#SBATCH --job-name=Demux_QScore_R1      ### Job Name
+#SBATCH --nodes=1               ### Node count required for the job
+#SBATCH --cpus-per-task=1       ### Number of cpus (cores) per task
+
+#Slurm script -^
+
+/usr/bin/time -v ./QScore_Dist.py -f /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R1_001.fastq.gz -l 101 -o QScore_read1.png

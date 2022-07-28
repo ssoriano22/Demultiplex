@@ -12,12 +12,16 @@
 
 2. Per-base NT distribution
     1. Use markdown to insert your 4 histograms here.
+    
     Read 1 - QScore Distribution
     ![This is the Read 1 QScore distribution](./QScore_read1.png)
+    
     Index 1 - QScore Distribution
     ![This is the Index 1 QScore distribution](./QScore_index1.png)
+    
     Read 2 - QScore Distribution
     ![This is the Read 2 QScore distribution](./QScore_read2.png)
+    
     Index 2 - QScore Distribution
     ![This is the Index 2 QScore distribution](./QScore_index2.png)
 

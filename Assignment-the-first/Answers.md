@@ -14,15 +14,19 @@
     1. Use markdown to insert your 4 histograms here.
     
     Read 1 - QScore Distribution
+    
     ![This is the Read 1 QScore distribution](./QScore_read1.png)
     
     Index 1 - QScore Distribution
+    
     ![This is the Index 1 QScore distribution](./QScore_index1.png)
     
     Read 2 - QScore Distribution
+    
     ![This is the Read 2 QScore distribution](./QScore_read2.png)
     
     Index 2 - QScore Distribution
+    
     ![This is the Index 2 QScore distribution](./QScore_index2.png)
 
     2. Index reads should have a quality score cutoff of >30, meaning that the accuracy of each base call is >99.9% (expected every 1 in 1000 bases is an error). Biological reads should have a quality score cutoff of >20, meaning that the accuracy of each base call is >99% (expected every 1 in 100 bases is an error). The biological reads should be high accuracy if possible, but the indices essentially require the highest possible quality scores so that you can be sure that your datasets have separated (demultiplexed) accurately.

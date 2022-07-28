@@ -21,7 +21,7 @@ Part 1: Started 26JUL2022
 * Used the following command (with each file name above) to find read lengths for each file
     ** $ zcat 1294_S1_L008_R1_001.fastq.gz | head -2 | tail -1 | wc
     ** Subtract 1 from results due to newline character
-* Created QScore_Dist.py to generate a distribution of QScores per base position for a specified file name and read length.
+* Created QScore_Dist.py (Python 3.10) to generate a distribution of QScores per base position for a specified file name and read length.
 * Installed numpy on Talapas and started interactive node with following command
     ** $ srun --account=bgmp --partition=bgmp --nodes=1 --ntasks-per-node=1 --time=2:00:00 --cpus-per-task=1 --pty bash
     ** Job 21722879 created and allocated to n278

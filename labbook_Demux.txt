@@ -90,3 +90,30 @@ Part 2: Started 26JUL2022
     ** See Demux_Pseudo.txt for full pseudocode w/ rational for each step
 * Uploaded all Assignment-the-first files to github
     
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Part 3: Started 02AUG2022
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Created Demux.py for Part 3 script
+    ** Using type annotations for variables
+    ** Will need to use argparse for input filnames (data and known indexes) before submittal
+* Wrote reverse complement function and added to bioinfo.py (v0.4) - commented out in Demux.py
+* Used "while True" loop and "with open" to open all four test input files simultaneously
+    ** Fixed break condition (end of file) to only look at one file for empty string (avoid issues w/ multiple "or"s)
+* Created "create_record()" function to take an (input) file handle and return a list containing the record lines
+    ** Tested record creation for test input files - success!
+* Wrote code to edit header lines of every iterated record
+    ** Used separate "add_IndexPairHeader()" function, used to edit R1 and R4 record headers (0 index)
+    ** Used rev_comp() function to get reverse complement of index2
+        *** Should "N"s be at the same base loci (not reversed like other bases)?
+        *** Not for this - use reverse complement.
+* First "screening" conditional - if either index contains "N"
+    ** Write R1 and R4 records to unknown R1 and R2 files
+* Added code (before opening data files) to open known indexes file ("indexes.txt") and create set of known indexes
+* Added open_outputs() function to open the 52 output files (48 dual matched (DM) - 24 each R1/R2, 2 index hopped (IH) - 1 each R1/R2, 2 unknown (U) - 1 each R1/R2)
+    ** Used open_outputs() function in main code directly before opening 4 data (FASTQ) files
+* Added close_outputs() function to close all 52 output file handles in fh_dict at end of main code.
+
+
+
+

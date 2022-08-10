@@ -55,7 +55,7 @@ CACTTCAC-CACTTCAC       2765861/363246735       0.761427628523626
 
 DM Index Distribution:
 
-![Histogram of DM Indexes](/projects/bgmp/ssoriano/bioinfo/Bi622/Demultiplex/Assignment-the-third/DM_Dist.png)
+![Histogram of DM Indexes](./DM_Dist.png)
 
 Summary: The TACCGGAT index accounted for the highest percentage of dual-matched indexes (14.2%), followed by the TCTTCGAC index (8.6%) and the CTCTGGAT index (7.1%). 
 

@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#SBATCH --account=bgmp          ### SLURM account which will be charged for the job
+#SBATCH --partition=bgmp          ### partition to run things
+#SBATCH --job-name=Demux_zip      ### Job Name
+#SBATCH --nodes=1              ### Node count required for the job
+#SBATCH --cpus-per-task=15       ### Number of cpus (cores) per task
+#SBATCH --mail-user=ssoriano@uoregon.edu ### Send email when done
+#SBATCH --mail-type=END
+
+#Slurm script -^
+
+Files="./Demux_Output_Files/*.fq"
+
+for file in $Files;
+do
+    echo "$file in process"
+    pigz --fast $file
+done

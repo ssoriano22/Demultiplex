@@ -1,0 +1,32 @@
+#!/bin/bash
+
+#SBATCH --account=bgmp          ### SLURM account which will be charged for the job
+#SBATCH --partition=bgmp          ### partition to run things
+#SBATCH --job-name=Demux      ### Job Name
+#SBATCH --nodes=1              ### Node count required for the job
+#SBATCH --cpus-per-task=5       ### Number of cpus (cores) per task
+#SBATCH --mail-user=ssoriano@uoregon.edu ### Send email when done
+#SBATCH --mail-type=END
+
+#Slurm script -^
+
+# TEST DATA INPUT FILES
+# /projects/bgmp/ssoriano/bioinfo/Bi622/Demultiplex/TEST-input_FASTQ/test1_P2.fq
+# /projects/bgmp/ssoriano/bioinfo/Bi622/Demultiplex/TEST-input_FASTQ/test2_P2.fq
+# /projects/bgmp/ssoriano/bioinfo/Bi622/Demultiplex/TEST-input_FASTQ/test3_P2.fq
+# /projects/bgmp/ssoriano/bioinfo/Bi622/Demultiplex/TEST-input_FASTQ/test4_P2.fq
+
+# FINAL DATA INPUT FILES
+# /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R1_001.fastq.gz
+# /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R2_001.fastq.gz
+# /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R3_001.fastq.gz
+# /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R4_001.fastq.gz
+
+# KNOWN INDEXES FILE
+# /projects/bgmp/shared/2017_sequencing/indexes.txt
+
+/usr/bin/time -v ./Demux.py -R1 /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R1_001.fastq.gz \
+    -R2 /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R2_001.fastq.gz \
+    -R3 /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R3_001.fastq.gz \
+    -R4 /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R4_001.fastq.gz \
+    -KI /projects/bgmp/shared/2017_sequencing/indexes.txt

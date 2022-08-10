@@ -35,13 +35,13 @@ def validate_DNA_seq(DNA):
     '''This function takes a string. Returns True if string is composed
     of only As, Ts, Gs, and Cs. False otherwise. Case insensitive.'''
     DNA = DNA.upper()
-    return len(DNA) == DNA.count("A") + DNA.count("T") + DNA.count("G") + DNA.count("C")
+    return len(DNA) == DNA.count("A") + DNA.count("T") + DNA.count("G") + DNA.count("C") + DNA.count("N")
 
 def validate_base_seq(seq,RNAflag=False):
     '''This function takes a string. Returns True if string is composed
     of only As, Ts (or Us if RNAflag), Gs, Cs. False otherwise. Case insensitive.'''
     seq = seq.upper()
-    return len(seq) == seq.count("A") + seq.count("U" if RNAflag else "T") + seq.count("G") + seq.count("C")
+    return len(seq) == seq.count("A") + seq.count("U" if RNAflag else "T") + seq.count("G") + seq.count("C") + seq.count("N")
 
 def gc_content(DNA):
     '''Returns GC content of a DNA sequence as a decimal between 0 and 1.'''

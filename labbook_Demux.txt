@@ -114,6 +114,63 @@ Part 3: Started 02AUG2022
     ** Used open_outputs() function in main code directly before opening 4 data (FASTQ) files
 * Added close_outputs() function to close all 52 output file handles in fh_dict at end of main code.
 
+08AUG2022
 
+* Wrote write_file() function to write to output files (input: fh, record; output: None)
+* Rewrote conditional to print "N" index records to unknown output files using write_file()
+* Borrowed qscore mean calculator code from QScore_Dist.py
+    ** Changed to make running sum per index read, not array of values
+* Cutoff score for indexes set to 35 - indexes need to be very high quality in order to have confidence in demultiplexing ability
+* Transferred qscore mean calculator to new function mean_qscore()
+* Wrote conditional to write low quality index reads (<35) to unknown output files
+* Wrote if/elif/elif conditional for true unknown index cases, index hopped cases, and dual-matched cases
+* Set up argparse (still commented out for now) to read in 4 data files and the known indexes file
+* Added counters (initialized before main code) to tally DM, IH, and U records (and sum all at end for total records count)
+    ** Also included percentage calculations for each count/total count
+* Added dictionaries to tally count of each index-pair type (as planned in Demux_Pseudo.txt)
 
+09AUG2022
 
+* Created Demux.srun slurm script to prepare for running final data files
+    ** Used following SBATCH commands:
+        *** #SBATCH --account=bgmp          ### SLURM account which will be charged for the job
+        *** #SBATCH --partition=bgmp          ### partition to run things
+        *** #SBATCH --job-name=Demux      ### Job Name
+        *** #SBATCH --nodes=1              ### Node count required for the job
+        *** #SBATCH --cpus-per-task=5       ### Number of cpus (cores) per task
+        *** #SBATCH --mail-user=ssoriano@uoregon.edu ### Send email when done
+        *** #SBATCH --mail-type=END
+    ** Also added /usr/bin/time -v to front of command to capture runtime details
+* Commented out dictionary to capture unknown index pairs/counts - not necessary for assignment and significantly elongates runtime.
+* Added matplotlib plots to create distributions for number for occurances of each index-pair for DM and IH reads.
+    ** Needed to remove second import matplotlib as plt2 statement and instead use plt.close() between creation of both plots
+* Added back (uncommented) argparse in Demux.py
+* Started to run Demux.srun but forgot to add back gzip/"rt" for large data files
+* Restarted Demux.srun - job ID 21916045 node n278
+    ** Completed run with Exit Status: 0
+    ** Time Elapsed: 1:15:23 (h:m:s)
+    ** Need to rerun to re-format distribution plots, but data seems to correlate w/ results of other classmates
+* Created Demux.md file to write summary of output data - will need to add correct graphs later
+* Removed IH graph code and added xticks rotation to DM_Dist.png code
+* Moved output FASTQ files from job ID 21916045 to Demux_Output_Files
+* Re-ran Demux.srun to generate improved DM_Dist.png graph
+    ** Job ID: 21920408 node n278
+    ** Exit Status: 0
+    ** Time Elapsed: 1:20:28 (h:m:s)
+* Axis labels tilted too far, will try again with rotation=30 instead of 45
+    ** Job ID: 21928059 node n278
+    ** Exit Status: 0
+    ** Time Elapsed: 1:14:20 (h:m:s)
+    ** Angle of x axis labels is sufficent to read one of the indexes, which is sufficient since these are dual-matched.
+* Used pigz --fast "./Demux_Output_Files/*.fq" in for loop to zip files
+    ** Ran in Demux_PigZ.srun slurm script (15 cpus)
+    ** Job ID: 21931021
+    ** Exit Status: 0
+* Used following bash command to sort DM index section of output file by percentage (high -> low)
+    ** $ head -33 slurm-21916045.out | tail -24 | sort -rnk 3
+* Used following bash command to sort IH index section of output file by fraction (high -> low)
+    ** Tried to sort by percentage, but "-rnk" options did not handle values with "e-05/e-06"
+    ** $ head -587  slurm-21916045.out | tail -552 | sort -rnk 2
+* Wrote up summaries for counts, DM index-pairs, and IH index-pairs in Demux.md file
+    ** Included DM_Dist.png in DM_index-pairs section
+* Uploaded all relevant code (NOT BIG FASTQ files) to GitHub

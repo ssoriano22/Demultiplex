@@ -256,7 +256,7 @@ fig = plt.figure()
 x = dict_DM.keys()
 plt.xlabel("Index-Pair")
 
-#Set mean qscores to y values
+#Set count to y values
 y = dict_DM.values()
 plt.ylabel("Number Occurances")
 
